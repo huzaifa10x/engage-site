@@ -1,0 +1,168 @@
+@import 'tailwindcss';
+
+/*
+ * 10X Engage website tokens: 10X Digital brand (lime #A9E324 on near-black).
+ * The lime is a FILL colour and always carries dark text. On white it is never used as text or
+ * as a thin line (unreadable); the two darker steps are for that:
+ *   --brand-500  borders, focus rings, small indicators (≥3:1 on white)
+ *   --brand-600  text and icons (≥7:1 on white)
+ */
+:root {
+    --ink: #0b0d09;
+    --ink-2: #1a1e16;
+    --body: #3b4237;
+    --muted: #5c6459;
+    --paper: #ffffff;
+    --paper-2: #f6f7f3;
+    --line: #e3e6dd;
+    --lime: #a9e324;
+    --lime-hover: #9ad41b;
+    --lime-ink: #101a02;
+    --brand-50: #f3fbdf;
+    --brand-100: #e4f5b8;
+    --brand-500: #689d0f;
+    --brand-600: #3f6212;
+}
+
+@theme inline {
+    --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+    --color-ink: var(--ink);
+    --color-ink-2: var(--ink-2);
+    --color-body: var(--body);
+    --color-muted: var(--muted);
+    --color-paper: var(--paper);
+    --color-paper-2: var(--paper-2);
+    --color-line: var(--line);
+    --color-lime: var(--lime);
+    --color-lime-hover: var(--lime-hover);
+    --color-lime-ink: var(--lime-ink);
+    --color-brand-50: var(--brand-50);
+    --color-brand-100: var(--brand-100);
+    --color-brand-500: var(--brand-500);
+    --color-brand-600: var(--brand-600);
+
+    --shadow-card: 0 1px 2px rgba(11, 13, 9, 0.04), 0 2px 8px rgba(11, 13, 9, 0.05);
+    --shadow-lift: 0 12px 32px -8px rgba(11, 13, 9, 0.16), 0 4px 10px -4px rgba(11, 13, 9, 0.08);
+
+    --container-site: 74rem;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 5rem;
+        -webkit-text-size-adjust: 100%;
+    }
+    body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+    h1,
+    h2,
+    h3 {
+        letter-spacing: -0.025em;
+        text-wrap: balance;
+    }
+    p {
+        text-wrap: pretty;
+    }
+    ::selection {
+        background: var(--lime);
+        color: var(--lime-ink);
+    }
+    :focus-visible {
+        outline: 2px solid var(--brand-500);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+        * {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* Long-form policy text. Kept as plain CSS because the HTML comes from Markdown. */
+.prose-legal {
+    color: var(--body);
+    font-size: 1rem;
+    line-height: 1.75;
+}
+.prose-legal > * + * {
+    margin-top: 1.1em;
+}
+.prose-legal h2 {
+    color: var(--ink);
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2.4em;
+    scroll-margin-top: 6rem;
+}
+.prose-legal h3 {
+    color: var(--ink);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin-top: 1.8em;
+}
+.prose-legal a {
+    color: var(--brand-600);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.prose-legal strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+.prose-legal ul,
+.prose-legal ol {
+    padding-left: 1.4em;
+}
+.prose-legal ul {
+    list-style: disc;
+}
+.prose-legal ol {
+    list-style: decimal;
+}
+.prose-legal li + li {
+    margin-top: 0.4em;
+}
+.prose-legal table {
+    border-collapse: collapse;
+    display: block;
+    font-size: 0.9375rem;
+    max-width: 100%;
+    overflow-x: auto;
+}
+.prose-legal th,
+.prose-legal td {
+    border: 1px solid var(--line);
+    padding: 0.6em 0.85em;
+    text-align: left;
+    vertical-align: top;
+}
+.prose-legal th {
+    background: var(--paper-2);
+    color: var(--ink);
+    font-weight: 600;
+}
+.prose-legal blockquote {
+    border-left: 3px solid var(--lime);
+    color: var(--ink-2);
+    padding-left: 1em;
+}
+.prose-legal hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 2.5em 0;
+}
