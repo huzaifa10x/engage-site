@@ -63,19 +63,36 @@ export function featureValue(feature: PlanFeature | undefined): string | boolean
 
 const titleCase = (text: string) => text.replace(/[_-]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
+/**
+ * A feature label inside a sentence: "Team seats" → "team seats", but names keep their capitals
+ * ("WhatsApp numbers", "API access", "SSO").
+ */
+function inline(label: string): string {
+    const first = label.split(' ')[0] ?? '';
+
+    return /[A-Z]/.test(first.slice(1)) ? label : label.charAt(0).toLowerCase() + label.slice(1);
+}
+
+/** Clearer wording on a card for numbers whose unit alone ("recipients/month") does not say what they count. */
+const CARD_WORDING: Record<string, string> = {
+    campaign_reach_monthly: 'campaign recipients per month',
+    automation_executions_monthly: 'automation runs per month',
+};
+
 /** One line for a plan card, e.g. "3 WhatsApp numbers" or "Shared inbox". */
 export function featureLine(feature: PlanFeature): string {
     if (feature.type === 'limit' || feature.type === 'metered') {
-        const label = feature.label.toLowerCase();
+        const label = inline(feature.label);
         if (feature.unlimited) return `Unlimited ${label}`;
         if (feature.unit === 'MB') return `${quantity(feature)} ${label}`;
+        if (CARD_WORDING[feature.key]) return `${quantity(feature)} ${CARD_WORDING[feature.key]}`;
         if (feature.unit?.includes('/')) return `${quantity(feature)} ${feature.unit.replace('/', ' per ')}`;
 
         return `${quantity(feature)} ${feature.limit === 1 ? label.replace(/s$/, '') : label}`;
     }
     const value = featureValue(feature);
 
-    return typeof value === 'string' ? `${value} ${feature.label.toLowerCase()}` : feature.label;
+    return typeof value === 'string' ? `${value} ${inline(feature.label)}` : feature.label;
 }
 
 /**
@@ -92,19 +109,32 @@ export const CARD_FEATURE_ORDER = [
     'automations',
     'automation_executions_monthly',
     'ticketing',
+    'csat',
     'analytics',
+    'agent_reports',
     'api_access',
     'webhooks',
     'sso',
+    'white_label',
     'support',
 ];
 
-export function cardFeatures(plan: Plan, max = 7): string[] {
+const sameValue = (a: PlanFeature | undefined, b: PlanFeature | undefined) => JSON.stringify(featureValue(a)) === JSON.stringify(featureValue(b));
+
+/**
+ * The lines for a plan card. With `previous` (the plan one step below), only what this plan ADDS
+ * or raises is listed, to be shown under "Everything in <previous>, plus", so each card says what
+ * is new instead of repeating the same list five times.
+ */
+export function cardFeatures(plan: Plan, max = 7, previous?: Plan | null): string[] {
     const byKey = new Map(plan.features.map((f) => [f.key, f]));
+    const before = new Map((previous?.features ?? []).map((f) => [f.key, f]));
     const lines: string[] = [];
     for (const key of CARD_FEATURE_ORDER) {
         const feature = byKey.get(key);
-        if (feature?.enabled) lines.push(featureLine(feature));
+        if (!feature?.enabled) continue;
+        if (previous && sameValue(feature, before.get(key))) continue;
+        lines.push(featureLine(feature));
         if (lines.length >= max) break;
     }
 
