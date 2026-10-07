@@ -10,7 +10,7 @@ export function Container({ className, ...props }: ComponentProps<'div'>) {
 }
 
 export function Section({ className, tone = 'paper', ...props }: ComponentProps<'section'> & { tone?: 'paper' | 'soft' | 'ink' }) {
-    return <section className={cn('py-16 sm:py-20 lg:py-24', tone === 'soft' && 'bg-paper-2', tone === 'ink' && 'bg-ink text-white', className)} {...props} />;
+    return <section className={cn('py-12 sm:py-20 lg:py-24', tone === 'soft' && 'bg-paper-2', tone === 'ink' && 'bg-ink text-white', className)} {...props} />;
 }
 
 export function Eyebrow({ children, onDark = false }: { children: ReactNode; onDark?: boolean }) {
@@ -43,8 +43,8 @@ export function SectionHeading({
     return (
         <div className={cn('max-w-2xl', center && 'mx-auto text-center')}>
             {eyebrow && <Eyebrow onDark={onDark}>{eyebrow}</Eyebrow>}
-            <h2 className={cn('text-3xl leading-[1.12] font-semibold sm:text-4xl', eyebrow && 'mt-4')}>{title}</h2>
-            {lead && <p className={cn('mt-4 text-[17px] leading-relaxed', onDark ? 'text-white/70' : 'text-muted')}>{lead}</p>}
+            <h2 className={cn('text-[1.7rem] leading-[1.14] font-semibold sm:text-4xl', eyebrow && 'mt-4')}>{title}</h2>
+            {lead && <p className={cn('mt-3.5 text-base leading-relaxed sm:text-[17px]', onDark ? 'text-white/70' : 'text-muted')}>{lead}</p>}
         </div>
     );
 }
@@ -87,7 +87,7 @@ export function Button({ href, variant = 'primary', size = 'md', className, chil
 }
 
 export function Card({ className, ...props }: ComponentProps<'div'>) {
-    return <div className={cn('rounded-2xl border border-line bg-paper p-6 shadow-card', className)} {...props} />;
+    return <div className={cn('rounded-2xl border border-line bg-paper p-5 shadow-card sm:p-6', className)} {...props} />;
 }
 
 export function FeatureCard({ icon, title, body }: { icon: ReactNode; title: string; body: string }) {
@@ -108,11 +108,12 @@ export function PageHero({ eyebrow, title, lead, children }: { eyebrow: string; 
                 className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_80%_at_15%_0%,rgba(169,227,36,.20),transparent_60%),radial-gradient(40%_60%_at_95%_100%,rgba(169,227,36,.10),transparent_60%)]"
                 aria-hidden
             />
-            <Container className="relative py-16 sm:py-20 lg:py-24">
+            <Container className="relative py-12 sm:py-20 lg:py-24">
                 <Eyebrow onDark>{eyebrow}</Eyebrow>
-                <h1 className="mt-5 max-w-3xl text-4xl leading-[1.08] font-semibold sm:text-5xl">{title}</h1>
-                <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/70">{lead}</p>
-                {children && <div className="mt-8 flex flex-wrap gap-3">{children}</div>}
+                <h1 className="mt-5 max-w-3xl text-[2rem] leading-[1.1] font-semibold sm:text-5xl sm:leading-[1.08]">{title}</h1>
+                <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-white/70 sm:mt-5 sm:text-lg">{lead}</p>
+                {/* Buttons fill the width on phones (easy to tap) and sit side by side from tablets up. */}
+                {children && <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap [&>a]:w-full sm:[&>a]:w-auto">{children}</div>}
             </Container>
         </section>
     );

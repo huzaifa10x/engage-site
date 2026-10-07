@@ -32,12 +32,12 @@ export default async function StartPage({ searchParams }: { searchParams: Promis
     return (
         <section className="relative overflow-hidden bg-ink text-white">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_10%_0%,rgba(169,227,36,.2),transparent_60%)]" aria-hidden />
-            <Container className="relative grid gap-12 py-14 sm:py-20 lg:grid-cols-2 lg:items-center lg:py-24">
+            <Container className="relative grid gap-9 py-10 sm:gap-12 sm:py-20 lg:grid-cols-2 lg:items-center lg:py-24">
                 <div>
-                    <h1 className="text-4xl leading-[1.08] font-semibold sm:text-5xl">
+                    <h1 className="text-[2rem] leading-[1.1] font-semibold sm:text-5xl sm:leading-[1.08]">
                         {days ? `Start your ${days}-day free trial.` : 'Start your free trial.'}
                     </h1>
-                    <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/70">
+                    <p className="mt-4 max-w-lg text-[17px] leading-relaxed text-white/70 sm:mt-5 sm:text-lg">
                         {trialPlan ? `Your trial includes everything in ${trialPlan.name}.` : 'Your trial includes the full product.'} No card required, and
                         your workspace moves to the Free plan if you do nothing.
                     </p>
@@ -55,7 +55,7 @@ export default async function StartPage({ searchParams }: { searchParams: Promis
                     </ul>
                 </div>
 
-                <div className="rounded-3xl bg-paper p-6 text-ink shadow-lift sm:p-8">
+                <div className="rounded-3xl bg-paper p-5 text-ink shadow-lift sm:p-8">
                     {plan && (
                         <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-line bg-paper-2 px-4 py-3.5">
                             <div>

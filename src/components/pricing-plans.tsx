@@ -1,7 +1,7 @@
 'use client';
 
 import { CheckIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui';
 import type { Interval } from '@/config/site';
@@ -27,13 +27,27 @@ function action(plan: Plan, interval: Interval, catalog: Catalog): { label: stri
 /**
  * Plan cards with a monthly / yearly switch. Every name, price, limit and feature shown here is
  * the `catalog` prop, which the page fetched from the product's API.
+ *
+ * On phones the cards form one swipeable row that opens on the trial plan, so comparing plans
+ * does not mean scrolling through five full screens. From tablets up they are a grid.
  */
 export function PricingPlans({ catalog, saving, compact = false }: { catalog: Catalog; saving: number; compact?: boolean }) {
     const [interval, setInterval] = useState<Interval>('monthly');
     const plans = catalog.plans;
     const hasYearly = plans.some((p) => p.price_yearly_minor);
-    // The plan the trial runs on is the one worth pointing at.
+    // The plan the trial runs on is the one worth pointing at; its button is the only lime one.
     const featured = plans.find((p) => p.key === catalog.trial.plan_key && !p.custom_price)?.key ?? null;
+
+    const row = useRef<HTMLDivElement>(null);
+    const featuredCard = useRef<HTMLElement>(null);
+    useEffect(() => {
+        const track = row.current;
+        const card = featuredCard.current;
+        // Only when the row actually scrolls sideways (phones).
+        if (track && card && track.scrollWidth > track.clientWidth + 8) {
+            track.scrollLeft = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+        }
+    }, []);
 
     return (
         <div>
@@ -47,7 +61,7 @@ export function PricingPlans({ catalog, saving, compact = false }: { catalog: Ca
                                 aria-pressed={interval === value}
                                 onClick={() => setInterval(value)}
                                 className={cn(
-                                    'rounded-full px-5 py-2 text-[14.5px] font-semibold transition-colors',
+                                    'min-h-10 rounded-full px-4 text-[14.5px] font-semibold transition-colors sm:px-5',
                                     interval === value ? 'bg-ink text-white' : 'text-muted hover:text-ink',
                                 )}
                             >
@@ -68,9 +82,15 @@ export function PricingPlans({ catalog, saving, compact = false }: { catalog: Ca
                 </div>
             )}
 
+            <p className="mt-5 text-center text-[13px] text-muted sm:hidden">Swipe to compare plans →</p>
+
             <div
+                ref={row}
                 className={cn(
-                    'mt-10 grid gap-5 sm:grid-cols-2',
+                    // Phones: one snapping row that bleeds to the screen edges.
+                    '-mx-5 mt-3 flex snap-x snap-mandatory [scrollbar-width:none] gap-4 overflow-x-auto px-5 pt-4 pb-4 [&::-webkit-scrollbar]:hidden',
+                    // Tablets and up: a grid.
+                    'sm:mx-0 sm:mt-10 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pt-0 sm:pb-0',
                     plans.length >= 5 ? 'lg:grid-cols-3 xl:grid-cols-5' : plans.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3',
                 )}
             >
@@ -82,8 +102,9 @@ export function PricingPlans({ catalog, saving, compact = false }: { catalog: Ca
                     return (
                         <article
                             key={plan.key}
+                            ref={isFeatured ? featuredCard : undefined}
                             className={cn(
-                                'relative flex flex-col rounded-2xl border bg-paper p-6 shadow-card',
+                                'relative flex w-[82%] max-w-[21rem] shrink-0 snap-center flex-col rounded-2xl border bg-paper p-6 shadow-card sm:w-auto sm:max-w-none sm:shrink',
                                 isFeatured ? 'border-brand-500 ring-2 ring-lime/50' : 'border-line',
                             )}
                         >
@@ -100,7 +121,7 @@ export function PricingPlans({ catalog, saving, compact = false }: { catalog: Ca
                             <p className="mt-1 text-[13.5px] text-muted">{cta.note}</p>
                             {plan.description && !compact && <p className="mt-3 text-[14px] leading-relaxed text-body">{plan.description}</p>}
 
-                            <Button href={cta.href} variant={isFeatured ? 'primary' : plan.custom_price ? 'outline' : 'dark'} className="mt-5 w-full">
+                            <Button href={cta.href} variant={isFeatured ? 'primary' : 'outline'} className="mt-5 w-full">
                                 {cta.label}
                             </Button>
 

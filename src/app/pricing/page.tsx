@@ -61,7 +61,11 @@ export default async function PricingPage() {
                 </Container>
             </Section>
 
-            <CtaBand title="Start free. Upgrade when it pays for itself." lead="Your trial includes the full product. No card required." />
+            <CtaBand
+                title="Start free. Upgrade when it pays for itself."
+                lead="Your trial includes the full product, and your workspace moves to Free if you do nothing."
+                secondary={{ label: 'Talk to sales', href: '/demo' }}
+            />
         </>
     );
 }

@@ -1,7 +1,7 @@
 import { BarChart3Icon, FileTextIcon, HashIcon, KeyRoundIcon, LinkIcon, MegaphoneIcon, MessagesSquareIcon, ShieldCheckIcon, UsersIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 
-import { CtaBand } from '@/components/cta-band';
+import { CtaBand, InlineCta } from '@/components/cta-band';
 import { Button, Container, PageHero, Section } from '@/components/ui';
 
 export const metadata: Metadata = {
@@ -81,11 +81,34 @@ export default function ProductPage() {
 
             <Section>
                 <Container>
-                    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                        {FEATURES.map(({ icon: Icon, tag, title, body }) => (
+                    <div className="grid gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
+                        {FEATURES.slice(0, 6).map(({ icon: Icon, tag, title, body }) => (
                             <article
                                 key={tag}
-                                className="flex flex-col rounded-2xl border border-line bg-paper p-7 shadow-card transition-shadow hover:shadow-lift"
+                                className="flex flex-col rounded-2xl border border-line bg-paper p-6 shadow-card transition-shadow hover:shadow-lift sm:p-7"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <span className="inline-flex size-11 items-center justify-center rounded-xl bg-ink text-lime">
+                                        <Icon className="size-5" aria-hidden />
+                                    </span>
+                                    <span className="text-[12.5px] font-semibold tracking-wider text-brand-600 uppercase">{tag}</span>
+                                </div>
+                                <h2 className="mt-5 text-xl leading-snug font-semibold">{title}</h2>
+                                <p className="mt-2 text-[15.5px] leading-relaxed text-muted">{body}</p>
+                            </article>
+                        ))}
+                    </div>
+                </Container>
+                {/* One prompt, two thirds of the way down: enough has been shown to act on. */}
+                <div className="my-8 sm:my-10">
+                    <InlineCta text="See it working on your own number." />
+                </div>
+                <Container>
+                    <div className="grid gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
+                        {FEATURES.slice(6).map(({ icon: Icon, tag, title, body }) => (
+                            <article
+                                key={tag}
+                                className="flex flex-col rounded-2xl border border-line bg-paper p-6 shadow-card transition-shadow hover:shadow-lift sm:p-7"
                             >
                                 <div className="flex items-center gap-3">
                                     <span className="inline-flex size-11 items-center justify-center rounded-xl bg-ink text-lime">
@@ -101,7 +124,11 @@ export default function ProductPage() {
                 </Container>
             </Section>
 
-            <CtaBand title="Try it free." lead="Connect a number and send your first message today." secondary={{ label: 'See pricing', href: '/pricing' }} />
+            <CtaBand
+                title="Every feature is in your trial."
+                lead="Start free, connect a number and try all of it with your own team."
+                secondary={{ label: 'See pricing', href: '/pricing' }}
+            />
         </>
     );
 }

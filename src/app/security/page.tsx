@@ -37,7 +37,7 @@ export default function SecurityPage() {
             />
             <Section>
                 <Container>
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                         {ITEMS.map((item) => (
                             <FeatureCard key={item.title} {...item} />
                         ))}

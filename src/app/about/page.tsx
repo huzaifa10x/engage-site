@@ -21,7 +21,7 @@ export default function AboutPage() {
             />
             <Section>
                 <Container>
-                    <div className="grid gap-5 md:grid-cols-3">
+                    <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
                         <FeatureCard
                             icon={<Building2Icon />}
                             title="Who we are"
@@ -46,7 +46,7 @@ export default function AboutPage() {
                     </p>
                 </Container>
             </Section>
-            <CtaBand title="Come build on it with us." lead="We are onboarding teams and agencies now." />
+            <CtaBand title="Come build on it with us." lead="We are onboarding teams and agencies now. Start on your own, or let us walk you through it." />
         </>
     );
 }

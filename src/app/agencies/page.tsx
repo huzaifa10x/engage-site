@@ -1,7 +1,7 @@
 import { CheckIcon, HandshakeIcon, HashIcon, KeyRoundIcon, LayoutDashboardIcon, TagIcon, WalletIcon, XIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 
-import { CtaBand } from '@/components/cta-band';
+import { CtaBand, InlineCta } from '@/components/cta-band';
 import { Button, Container, FeatureCard, PageHero, Section, SectionHeading } from '@/components/ui';
 
 export const metadata: Metadata = {
@@ -38,15 +38,15 @@ export default function AgenciesPage() {
                 <Button href="/demo" size="lg">
                     Book a demo
                 </Button>
-                <Button href="/pricing" size="lg" variant="onDark">
-                    See pricing
+                <Button href="/start" size="lg" variant="onDark">
+                    Start free trial
                 </Button>
             </PageHero>
 
             <Section>
                 <Container>
                     <SectionHeading eyebrow="The problem" title="Agencies outgrow single-inbox tools fast." />
-                    <div className="mt-10 grid gap-5">
+                    <div className="mt-8 grid gap-4 sm:mt-10 sm:gap-5">
                         {COMPARE.map((row) => (
                             <div key={row.before} className="grid gap-4 md:grid-cols-2">
                                 <div className="rounded-2xl border border-line bg-paper-2 p-6">
@@ -67,10 +67,14 @@ export default function AgenciesPage() {
                 </Container>
             </Section>
 
+            <div className="pb-12 sm:pb-20">
+                <InlineCta text="See your clients' numbers in one console." action={{ label: 'Book a demo', href: '/demo' }} />
+            </div>
+
             <Section tone="soft">
                 <Container>
                     <SectionHeading eyebrow="Built for agencies" title="What you get." />
-                    <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                         {BENEFITS.map((item) => (
                             <FeatureCard key={item.title} {...item} />
                         ))}
@@ -82,7 +86,7 @@ export default function AgenciesPage() {
                 title="See it with your own client list."
                 lead="Book a 20-minute demo and we will set up a client number live."
                 primary={{ label: 'Book a demo', href: '/demo' }}
-                secondary={{ label: 'See pricing', href: '/pricing' }}
+                secondary={{ label: 'Start free trial', href: '/start' }}
             />
         </>
     );

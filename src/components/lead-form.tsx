@@ -2,14 +2,14 @@
 
 import { CheckCircle2Icon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
 const TEAM_SIZES = ['Just one (SMB)', '2–5', '6–20 (agency)', '20+ (agency)'];
 
 const field =
-    'h-12 w-full rounded-xl border border-line bg-paper px-4 text-[15px] outline-none transition-[border-color,box-shadow] placeholder:text-muted/70 hover:border-muted/50 focus-visible:border-brand-500 focus-visible:ring-[3px] focus-visible:ring-brand-500/20';
+    'h-12 w-full rounded-xl border border-line bg-paper px-4 text-base outline-none transition-[border-color,box-shadow] placeholder:text-muted/70 hover:border-muted/50 focus-visible:border-brand-500 focus-visible:ring-[3px] focus-visible:ring-brand-500/20';
 const label = 'grid gap-1.5 text-[14px] font-medium';
 
 /** Demo / contact form. Sends to this site's /api/lead, which forwards it to the product's API. */
@@ -25,6 +25,7 @@ export function LeadForm({
     const pathname = usePathname();
     const [state, setState] = useState<'idle' | 'sending' | 'sent'>('idle');
     const [error, setError] = useState<string | null>(null);
+    const done = useRef<HTMLDivElement>(null);
 
     const submit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -42,6 +43,8 @@ export function LeadForm({
                 throw new Error(body?.message ?? 'Something went wrong. Please try again.');
             }
             setState('sent');
+            // On a phone the confirmation would otherwise appear above the screen.
+            requestAnimationFrame(() => done.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
         } catch (e) {
             setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.');
             setState('idle');
@@ -50,7 +53,7 @@ export function LeadForm({
 
     if (state === 'sent') {
         return (
-            <div role="status" className="rounded-2xl border border-brand-500/40 bg-brand-50 p-8 text-center">
+            <div ref={done} role="status" className="scroll-mt-24 rounded-2xl border border-brand-500/40 bg-brand-50 p-8 text-center">
                 <CheckCircle2Icon className="mx-auto size-10 text-brand-600" />
                 <h3 className="mt-3 text-xl font-semibold">Thank you, we have your request</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-body">We usually reply within one business day, at the email you gave us.</p>
@@ -75,6 +78,14 @@ export function LeadForm({
                     Company
                     <input name="company" maxLength={160} autoComplete="organization" className={field} />
                 </label>
+                <label className={label}>
+                    <span>
+                        Phone <span className="font-normal text-muted">(optional)</span>
+                    </span>
+                    <input name="phone" type="tel" maxLength={40} autoComplete="tel" inputMode="tel" placeholder="+971 50 123 4567" className={field} />
+                </label>
+            </div>
+            <div className="grid gap-4">
                 <label className={label}>
                     WhatsApp numbers or clients
                     <select name="team_size" defaultValue="" className={cn(field, 'appearance-none')}>

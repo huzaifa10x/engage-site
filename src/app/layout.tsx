@@ -2,6 +2,7 @@ import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
 
+import { MobileCtaBar } from '@/components/mobile-cta-bar';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { site } from '@/config/site';
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     {children}
                 </main>
                 <SiteFooter />
+                <MobileCtaBar />
             </body>
         </html>
     );

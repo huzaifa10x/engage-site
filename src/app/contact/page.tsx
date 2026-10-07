@@ -16,8 +16,8 @@ export default function ContactPage() {
         <>
             <PageHero eyebrow="Contact" title="Talk to a human." lead="Reach us however suits you. We usually reply within one business day." />
             <Section>
-                <Container className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
-                    <div className="rounded-3xl border border-line bg-paper p-6 shadow-card sm:p-8">
+                <Container className="grid gap-6 sm:gap-10 lg:grid-cols-[1.2fr_1fr]">
+                    <div className="rounded-3xl border border-line bg-paper p-5 shadow-card sm:p-8">
                         <h2 className="text-2xl font-semibold">Send us a message</h2>
                         <p className="mt-1.5 mb-6 text-[15px] text-muted">Sales, support or anything else.</p>
                         <LeadForm topic="contact" submitLabel="Send message" withMessage />

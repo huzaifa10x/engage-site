@@ -33,8 +33,8 @@ export default async function DemoPage({ searchParams }: { searchParams: Promise
                 }
             />
             <Section>
-                <Container className="grid gap-10 lg:grid-cols-[1.25fr_1fr]">
-                    <div className="rounded-3xl border border-line bg-paper p-6 shadow-card sm:p-8">
+                <Container className="grid gap-6 sm:gap-10 lg:grid-cols-[1.25fr_1fr]">
+                    <div className="rounded-3xl border border-line bg-paper p-5 shadow-card sm:p-8">
                         <h2 className="text-2xl font-semibold">Tell us about you</h2>
                         <p className="mt-1.5 mb-6 text-[15px] text-muted">We usually reply within one business day.</p>
                         <LeadForm

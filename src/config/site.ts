@@ -59,6 +59,7 @@ export const mainNav: NavLink[] = [
     { label: 'For agencies', href: '/agencies' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'Security', href: '/security' },
+    { label: 'Book a demo', href: '/demo' },
 ];
 
 /** Footer columns. The "Legal" column is filled automatically from content/legal (see lib/legal.ts). */

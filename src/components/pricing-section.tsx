@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Button } from '@/components/ui';
 import { app, appHost } from '@/config/site';
 import { getCatalog } from '@/lib/plans';
@@ -34,10 +36,18 @@ export async function PricingSection({ compact = false }: { compact?: boolean })
     return (
         <>
             <PricingPlans catalog={catalog} saving={bestYearlySaving(catalog.plans)} compact={compact} />
-            <p className="mx-auto mt-8 max-w-3xl text-center text-[13.5px] leading-relaxed text-muted">
+            <p className="mx-auto mt-5 max-w-3xl text-center text-[13.5px] leading-relaxed text-muted sm:mt-8">
                 Prices in {currency}. {catalog.vat.percent > 0 && `UAE VAT (${catalog.vat.percent}%) is added where applicable. `}
                 WhatsApp message fees are charged by Meta at its published rates; <strong className="font-semibold text-ink">we add 0% markup</strong>.
             </p>
+            {!compact && (
+                <p className="mt-4 text-center text-[15px] text-body">
+                    Not sure which plan fits?{' '}
+                    <Link href="/demo" className="font-semibold text-brand-600 underline underline-offset-4">
+                        Talk to sales
+                    </Link>
+                </p>
+            )}
         </>
     );
 }
