@@ -10,15 +10,15 @@ export const site = {
     name: '10X Engage',
     shortName: 'Engage',
     company: '10X Digital',
-    legalName: '10X Digital FZC',
+    legalName: 'Tenx Digital Fzco',
     tagline: 'The premium WhatsApp platform for teams and agencies.',
     description:
         'A shared team inbox, broadcasts with real guardrails and multi-number management on the official WhatsApp Business Platform. 0% markup on messages. Built by 10X Digital, a Meta Tech Provider.',
     location: 'Dubai, United Arab Emirates',
-    url: trim(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://engage.10xdigital.ae'),
+    url: trim(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://engage-site.10xdigital.ae'),
     appUrl: trim(process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.10xdigital.ae'),
     companyUrl: 'https://www.10xdigital.ae',
-    contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || null,
+    contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@10xdigital.ae',
     whatsappNumber: (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '').replace(/\D/g, '') || null,
 } as const;
 

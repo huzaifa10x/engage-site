@@ -1,0 +1,1 @@
+bash /opt/engage/backend/deploy/deploy.sh site

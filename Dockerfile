@@ -8,7 +8,7 @@ FROM node:22-alpine AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 # NEXT_PUBLIC_* values are compiled into the pages, so they are build arguments.
-ARG NEXT_PUBLIC_SITE_URL="https://engage.10xdigital.ae"
+ARG NEXT_PUBLIC_SITE_URL="https://engage-site.10xdigital.ae"
 ARG NEXT_PUBLIC_APP_URL="https://app.10xdigital.ae"
 ARG NEXT_PUBLIC_WHATSAPP_NUMBER=""
 ARG NEXT_PUBLIC_CONTACT_EMAIL=""

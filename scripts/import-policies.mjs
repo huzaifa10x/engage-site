@@ -17,13 +17,21 @@
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
+// Matched without regard to capitals. The values are the company details given in the policy
+// document's own "Contact" sections; change them here if the document changes.
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://engage-site.10xdigital.ae').replace(/\/+$/, '');
 const REPLACEMENTS = {
-    '[Company Legal Name]': '10X Digital FZC',
-    '[Company Name]': '10X Digital FZC',
+    // A link written with a placeholder domain points at the real page on this site.
+    'https://[yourdomain.com]/data-deletion': `${SITE_URL}/user-data-deletion`,
+    '[yourdomain.com]': SITE_URL.replace(/^https?:\/\//, ''),
+    '[Company Legal Name]': 'Tenx Digital Fzco',
+    '[Company Name]': 'Tenx Digital Fzco',
     '[App Name]': '10X Engage',
     '[Product Name]': '10X Engage',
-    '[Website URL]': 'https://engage.10xdigital.ae',
-    '[App URL]': 'https://app.10xdigital.ae',
+    '[support email]': 'info@10xdigital.ae',
+    '[registered address]': '6162 Building A1: DDP, Dubai Silicon Oasis',
+    '[Emirate]': 'Dubai',
+    '[info@10xdigital.ae]': 'info@10xdigital.ae',
 };
 
 const input = process.argv[2];
@@ -32,7 +40,8 @@ if (!input) {
     process.exit(1);
 }
 
-const clean = (s) => s.replace(/\\([\[\]().\-_*#!+])/g, '$1').replace(/\u00a0/g, ' ');
+// Markdown exports put a backslash before punctuation (\\[ \\] \\. \\: \\+ …); the text itself has none.
+const clean = (s) => s.replace(/\\([!-\/:-@\[-`{-~])/g, '$1').replace(/\u00a0/g, ' ');
 const bare = (s) =>
     clean(s)
         .replace(/^#+\s*/, '')
@@ -80,7 +89,11 @@ starts.forEach((start, n) => {
             from = i + 1;
         }
     }
-    start.body = lines.slice(from, end);
+    // Google Docs tabs export their tab name as an extra heading right before the next policy's
+    // title: headings (and blank lines) left dangling at the very end belong to nothing.
+    let last = end;
+    while (last > from && (bare(lines[last - 1]) === '' || /^#{1,6}\s/.test(lines[last - 1].trim()))) last--;
+    start.body = lines.slice(from, last);
 });
 
 const out = path.join(process.cwd(), 'content', 'legal');
@@ -97,13 +110,15 @@ starts.forEach((policy, index) => {
     seen.add(policy.url);
 
     let body = policy.body.map(clean).join('\n');
-    for (const [from, to] of Object.entries(REPLACEMENTS)) body = body.split(from).join(to);
+    for (const [from, to] of Object.entries(REPLACEMENTS)) {
+        body = body.replace(new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), to);
+    }
     // Plain-text exports lose headings: a short numbered line on its own ("3. How we use data") is one.
     body = body.replace(/^(?!#)(\d{1,2}\.\s+[^\n]{2,90})\n(?=\n|[^\n])/gm, (line, heading) => (/[.:;,]$/.test(heading.trim()) ? line : `## ${heading}\n`));
     // Headings inside a policy start at level 2 (the page title is level 1).
     if (/^#\s/m.test(body)) body = body.replace(/^(#{1,5})\s/gm, '$1# ');
     body = body.replace(/\n{3,}/g, '\n\n').trim();
-    for (const m of body.matchAll(/\[[A-Z][^\]\n]{2,60}\](?!\()/g)) leftovers.add(m[0]);
+    for (const m of body.matchAll(/\[[A-Za-z][^\]\n]{2,60}\](?!\()/g)) leftovers.add(m[0]);
 
     const name = policy.url.replace(/^\//, '').replace(/\//g, '__');
     const front = [
