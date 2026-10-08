@@ -36,7 +36,10 @@ export function LeadForm({
             const response = await fetch('/api/lead', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), topic, source: pathname }),
+                // elapsed_ms: how long this page has been open. There is no hidden "bot trap" field: browsers and
+                // password managers filled those in for real visitors. A person cannot send the form within a
+                // second and a half of the page opening; that is the only bot signal used.
+                body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), topic, source: pathname, elapsed_ms: Math.round(performance.now()) }),
             });
             if (!response.ok) {
                 const body = (await response.json().catch(() => null)) as { message?: string } | null;
@@ -102,21 +105,6 @@ export function LeadForm({
                     <textarea name="message" rows={4} maxLength={4000} className={cn(field, 'h-auto py-3 leading-relaxed')} />
                 </label>
             )}
-            {/* Not for people: a field only bots fill in. */}
-            {/* Bot trap. It must NOT have a name or type a browser's autofill recognises ("website", "url",
-                "company" …): the old one was called "website", autofill filled it in for real visitors, and
-                their inquiries were discarded as bots. */}
-            <input
-                name="confirm_code"
-                type="text"
-                tabIndex={-1}
-                autoComplete="new-password"
-                aria-hidden
-                data-lpignore="true"
-                data-1p-ignore
-                className="absolute -left-[9999px] size-px opacity-0"
-            />
-
             {error && (
                 <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] text-red-700">
                     {error}

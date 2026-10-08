@@ -26,7 +26,8 @@ export async function POST(request: Request) {
         topic: ['demo', 'contact', 'enterprise', 'trial'].includes(text('topic', 20)) ? text('topic', 20) : 'demo',
         message: text('message', 4000) || null,
         source: text('source', 190) || null,
-        confirm_code: text('confirm_code', 200), // bot trap, judged by the API (which keeps the entry either way)
+        // Time the form was open, for the API's bot check (it keeps the inquiry either way). Absent → treated as real.
+        elapsed_ms: typeof body.elapsed_ms === 'number' && Number.isFinite(body.elapsed_ms) ? Math.max(0, Math.round(body.elapsed_ms)) : null,
     };
     if ((!payload.name && payload.topic !== 'trial') || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
         return NextResponse.json({ message: 'Please enter your name and a valid work email.' }, { status: 422 });
