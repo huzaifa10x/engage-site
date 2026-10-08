@@ -103,7 +103,19 @@ export function LeadForm({
                 </label>
             )}
             {/* Not for people: a field only bots fill in. */}
-            <input name="website" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] size-px opacity-0" />
+            {/* Bot trap. It must NOT have a name or type a browser's autofill recognises ("website", "url",
+                "company" …): the old one was called "website", autofill filled it in for real visitors, and
+                their inquiries were discarded as bots. */}
+            <input
+                name="confirm_code"
+                type="text"
+                tabIndex={-1}
+                autoComplete="new-password"
+                aria-hidden
+                data-lpignore="true"
+                data-1p-ignore
+                className="absolute -left-[9999px] size-px opacity-0"
+            />
 
             {error && (
                 <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] text-red-700">

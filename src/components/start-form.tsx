@@ -18,7 +18,22 @@ export function StartForm({ plan, interval, cta = 'Continue' }: { plan?: string;
             onSubmit={(event) => {
                 event.preventDefault();
                 setBusy(true);
-                window.location.assign(app.register({ plan, interval, email: email.trim() }));
+                const address = email.trim();
+                // Tell the team a trial sign-up has started (it appears under Super Admin → Inquiries and is
+                // emailed like every other form). "keepalive" lets the request finish while the browser moves
+                // on to the product, so signing up is never slowed down or blocked by it.
+                void fetch('/api/lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: address,
+                        topic: 'trial',
+                        team_size: plan ? `Plan: ${plan}${interval ? ` (${interval})` : ''}` : null,
+                        source: window.location.pathname,
+                    }),
+                    keepalive: true,
+                }).catch(() => undefined);
+                window.location.assign(app.register({ plan, interval, email: address }));
             }}
             className="grid gap-3 sm:flex"
         >

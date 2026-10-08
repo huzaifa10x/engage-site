@@ -17,17 +17,18 @@ export async function POST(request: Request) {
 
     const text = (key: string, max: number) => (typeof body[key] === 'string' ? (body[key] as string).trim().slice(0, max) : '');
     const payload = {
-        name: text('name', 120),
+        // A trial sign-up starts with only an email address.
+        name: text('name', 120) || null,
         email: text('email', 190),
         company: text('company', 160) || null,
         phone: text('phone', 40) || null,
         team_size: text('team_size', 40) || null,
-        topic: ['demo', 'contact', 'enterprise'].includes(text('topic', 20)) ? text('topic', 20) : 'demo',
+        topic: ['demo', 'contact', 'enterprise', 'trial'].includes(text('topic', 20)) ? text('topic', 20) : 'demo',
         message: text('message', 4000) || null,
         source: text('source', 190) || null,
-        website: text('website', 10), // honeypot, checked by the API
+        confirm_code: text('confirm_code', 200), // bot trap, judged by the API (which keeps the entry either way)
     };
-    if (!payload.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+    if ((!payload.name && payload.topic !== 'trial') || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
         return NextResponse.json({ message: 'Please enter your name and a valid work email.' }, { status: 422 });
     }
 
@@ -44,7 +45,10 @@ export async function POST(request: Request) {
         if (!response.ok) throw new Error(`API answered ${response.status}`);
 
         return NextResponse.json({ status: 'received' }, { status: 201 });
-    } catch {
+    } catch (error) {
+        // Visible in the site container's log (docker compose logs site), so a broken relay is never silent.
+        console.error('[lead] could not pass the inquiry to the API:', error instanceof Error ? error.message : error);
+
         return NextResponse.json({ message: 'We could not send your request just now. Please try again, or contact us directly.' }, { status: 502 });
     }
 }
