@@ -49,7 +49,7 @@ Subject to the UAE Personal Data Protection Law (Federal Decree-Law No. 45 of 20
 
 ## 8. Data deletion
 
-You may request deletion of your account and associated personal data at any time. Instructions are available at https://engage-site.10xdigital.ae/user-data-deletion or by emailing info@10xdigital.ae. We will action verified requests within the period required by applicable law.
+You may request deletion of your account and associated personal data at any time. Instructions are available at https://engage.10xdigital.ae/user-data-deletion or by emailing info@10xdigital.ae. We will action verified requests within the period required by applicable law.
 
 ## 9. Security
 

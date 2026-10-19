@@ -19,7 +19,7 @@ import path from 'node:path';
 
 // Matched without regard to capitals. The values are the company details given in the policy
 // document's own "Contact" sections; change them here if the document changes.
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://engage-site.10xdigital.ae').replace(/\/+$/, '');
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://engage.10xdigital.ae').replace(/\/+$/, '');
 const REPLACEMENTS = {
     // A link written with a placeholder domain points at the real page on this site.
     'https://[yourdomain.com]/data-deletion': `${SITE_URL}/user-data-deletion`,
