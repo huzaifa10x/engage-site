@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { ComponentProps, ReactNode } from 'react';
 
+import { BRAND_LIME, WORDMARK } from '@/components/brand-artwork';
 import { cn } from '@/lib/utils';
 
 /** Small shared building blocks. Every page is assembled from these, so spacing and type stay consistent. */
@@ -119,13 +120,12 @@ export function PageHero({ eyebrow, title, lead, children }: { eyebrow: string; 
     );
 }
 
-export function Logo({ onDark = false }: { onDark?: boolean }) {
+/** The Engage logo (vector). `onDark` = on a dark surface: the ink turns white, the lime dot stays. */
+export function Logo({ onDark = false, className }: { onDark?: boolean; className?: string }) {
     return (
-        <span className="inline-flex items-center gap-2.5">
-            <span className="inline-flex size-9 items-center justify-center rounded-[10px] bg-lime text-[13px] font-extrabold tracking-tight text-lime-ink">
-                10X
-            </span>
-            <span className={cn('text-[19px] font-semibold tracking-tight', onDark ? 'text-white' : 'text-ink')}>Engage</span>
-        </span>
+        <svg viewBox={WORDMARK.viewBox} role="img" aria-label="10X Engage" className={cn('h-8 w-auto shrink-0', onDark ? 'text-white' : 'text-ink', className)}>
+            <path fill="currentColor" d={WORDMARK.ink} />
+            <circle fill={BRAND_LIME} {...WORDMARK.dot} />
+        </svg>
     );
 }
